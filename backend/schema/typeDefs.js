@@ -6,9 +6,6 @@ const typeDefs = gql`
     studentNumber: String!
     firstName: String!
     lastName: String!
-    address: String
-    city: String
-    phone: String
     email: String!
     program: String
     favouriteTopic: String
@@ -44,6 +41,9 @@ const typeDefs = gql`
       firstName: String!,
       lastName: String!,
       email: String!
+      program: String
+      favouriteTopic: String
+      strongestSkill: String
     ): AuthPayload
 
     loginStudent(studentNumber: String!, password: String!): AuthPayload

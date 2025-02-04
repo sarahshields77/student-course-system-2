@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Student = require('../models/studentModel');
 const Course = require('../models/courseModel');
-const authMiddleware = require('../middleware/authMiddleware');
 require('dotenv').config();
 
 const resolvers = {
