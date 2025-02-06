@@ -19,6 +19,7 @@ const LOGIN_STUDENT = gql`
 function LoginForm() {
   const [formData, setFormData] = useState({ studentNumber: "", password: "" });
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
   const [loginStudent] = useMutation(LOGIN_STUDENT);
 
@@ -40,18 +41,51 @@ function LoginForm() {
   };
 
   return (
-    <div className="container text-center mt-5">
-      <h2 className="mb-4">Student Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <input type="text" name="studentNumber" placeholder="Student Number" className="form-control" onChange={handleChange} required />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+            <div className="card shadow-lg p-4">
+                <h2 className="text-center mb-4">Student Login</h2>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="studentNumber" className="form-label">
+                        Student Number
+                    </label>
+                      <input
+                          type="text"
+                          id="studentNumber"
+                          name="studentNumber"
+                          className="form-control"
+                          value={formData.studentNumber}
+                          onChange={handleChange}
+                          required
+                      />
+                  </div>
+                  <div className="mb-3">
+                      <label htmlFor="password" className="form-label">
+                          Password
+                      </label>
+                      <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          className="form-control"
+                          value={formData.password}
+                          onChange={handleChange}
+                          required
+                      />
+                  </div>
+                  {error && <div className="alert alert-danger mt-3">{error}</div>}
+                  {success && <div className="alert alert-success mt-3">{success}</div>}
+                  <div className="text-center">
+                      <button type="submit" className="btn btn-secondary w-50">
+                          Login
+                      </button>
+                  </div>
+                </form>
+            </div>
         </div>
-        <div className="mb-3">
-          <input type="password" name="password" placeholder="Password" className="form-control" onChange={handleChange} required />
-        </div>
-        <button type="submit" className="btn btn-secondary">Login</button>
-      </form>
-      {error && <p className="text-danger mt-3">{error}</p>}
+      </div>
     </div>
   );
 }

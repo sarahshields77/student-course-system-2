@@ -23,6 +23,7 @@ a:hover {
 }
 
 body {
+  font-family: 'Libre Franklin', sans-serif;
   margin: 0;
   display: flex;
   place-items: center;
@@ -33,6 +34,22 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.bg-custom {
+  background-color: #B4BF5E;
+}
+
+header, footer {
+  width: 100vw; 
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+  max-width: 100%; 
+  padding-left: 0;
+  padding-right: 0;
 }
 
 button {
