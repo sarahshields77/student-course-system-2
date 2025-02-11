@@ -32,9 +32,10 @@ const typeDefs = gql`
     student(id: ID!): Student
     courses: [Course]
     course(id: ID!): Course
-    studentsByCourse(courseId: ID!): [Student]
+    studentsByCourse(courseCode: String!): [Student]
     listStudentCourses: [Course]
     listAllCourses: [Course]
+    listAllStudents: [Student]
   }
 
   type Mutation {
@@ -53,7 +54,7 @@ const typeDefs = gql`
 
     addCourseToStudent(courseCode: String!): Student
     dropCourseFromStudent(courseCode: String!): Student
-    updateCourseSection(courseId: ID!, section: String!): Course
+    updateCourseSection(courseCode: String!, newSection: String!): Course
   }
 `;
 

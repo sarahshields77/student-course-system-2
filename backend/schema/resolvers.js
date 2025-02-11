@@ -11,8 +11,9 @@ const resolvers = {
     courses: async () => await Course.find().populate('students'),
     course: async (_, { id }) => await Course.findById(id).populate('students'),
     course: async (_, { id }) => await Course.findById(id).populate('students'),
-    studentsByCourse: async (_, { courseId }) => {
-      const course = await Course.findById(courseId).populate('students');
+    
+    studentsByCourse: async (_, { courseCode }) => {
+      const course = await Course.findOne({ courseCode }).populate('students');
       if (!course) throw new Error("Course not found");
       return course.students;
     },
@@ -36,14 +37,19 @@ const resolvers = {
       });
       if (!student) throw new Error("Student not found");
   
-      console.log("✅ Student Found:", student);
-      console.log("📚 Student's Courses:", student.courses);
+      console.log("Student Found:", student);
+      console.log("Student's Courses:", student.courses);
   
       return student.courses;
     },
 
     listAllCourses: async () => {
       return await Course.find().populate("students");
+    },
+
+    listAllStudents: async () => {
+      console.log("Fetching all students...");
+      return await Student.find().populate("courses");
     },
   },
 
@@ -136,27 +142,33 @@ const resolvers = {
     },
 
 
-    updateCourseSection: async (_, { courseId, newSection }, { req }) => {
-      const token = req.headers.authorization?.split("Bearer ")[1];
-      if (!token) throw new Error("Unauthorized: No token provided");
-
-      try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const student = await Student.findById(decoded.id);
-        const course = await Course.findById(courseId);
-
-        if (!student || !course) throw new Error("Invalid student or course");
-
-        student.courses = student.courses.filter(id => id.toString() !== courseId);
-        course.students = course.students.filter(id => id.toString() !== student.id);
-
-        await student.save();
-        await course.save();
-        return student;
-      } catch (error) {
-        throw new Error("Unauthorized: Invalid token");
+    updateCourseSection: async (_, { courseCode, newSection }, context) => {
+      console.log(`🔍 Updating Section for ${courseCode} to ${newSection}`);
+  
+      if (!context.req.headers.authorization) {
+          throw new Error("Unauthorized: No token provided");
       }
+  
+      const token = context.req.headers.authorization.split("Bearer ")[1];
+      if (!token) throw new Error("Unauthorized: Invalid token format");
+  
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      const student = await Student.findById(user.id);
+      if (!student) throw new Error("Unauthorized: User not found");
+  
+      // Find the course by courseCode
+      const course = await Course.findOne({ courseCode });
+      if (!course) throw new Error("Course not found");
+  
+      // Update the section
+      course.section = newSection;
+      await course.save();
+  
+      console.log(`✅ Section updated to ${newSection}`);
+  
+      return course;
     },
+  
   },
 };
 
