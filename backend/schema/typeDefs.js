@@ -10,7 +10,7 @@ const typeDefs = gql`
     program: String
     favouriteTopic: String
     strongestSkill: String
-    courses: [Course]
+    courses: [Course]!
   }
 
   type Course {
@@ -33,6 +33,8 @@ const typeDefs = gql`
     courses: [Course]
     course(id: ID!): Course
     studentsByCourse(courseId: ID!): [Student]
+    listStudentCourses: [Course]
+    listAllCourses: [Course]
   }
 
   type Mutation {
@@ -49,8 +51,8 @@ const typeDefs = gql`
 
     loginStudent(studentNumber: String!, password: String!): AuthPayload
 
-    addCourseToStudent(courseId: ID!): Student
-    dropCourseFromStudent(courseId: ID!): Student
+    addCourseToStudent(courseCode: String!): Student
+    dropCourseFromStudent(courseCode: String!): Student
     updateCourseSection(courseId: ID!, section: String!): Course
   }
 `;
